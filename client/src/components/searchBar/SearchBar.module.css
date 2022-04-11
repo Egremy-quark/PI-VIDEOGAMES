@@ -1,0 +1,87 @@
+.navar {
+    margin: 30px 10px;
+    display: flex;
+    flex-direction: inline-block;
+    justify-content: center;
+    gap: 20px;
+}
+
+.addGame a {
+    margin-left: 40px;
+    border-radius: 5px;
+    border: solid 1px rgba(255, 255, 255, 0.582);
+    padding: 3px 9px 3px 9px;
+    cursor: pointer;
+    transition: 500ms;
+
+}
+
+.addGame a:hover {
+    padding: 3px 9px 3px 9px;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    box-shadow: 0px 5px 20px -10px white;
+    transform: scale(1.1);
+}
+
+.form {
+    /* padding: 100px 10px; */
+    /* background-color: blueviolet; */
+    display: flex;
+    flex-direction: inline-block;
+    justify-content: center;
+}
+
+.form input {
+    size: 10px;
+    /* padding: 10px 200px; */
+    WIDTH: 828px;
+    HEIGHT: 28px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(155, 153, 153, 0.671);
+    color: white;
+    /* padding-left: 10px; */
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    gap: 10px;
+    transition: 500ms;
+    /* size=32 name=text1> */
+}
+
+.form input::placeholder {
+    color: white;
+
+}
+
+.form input:hover {
+    background-color: white;
+
+}
+
+
+.form input::placeholder:hover {
+    color: black;
+}
+
+.form button {
+    /* width: 28px;
+    border-radius: 5px;
+    align-items: center; */
+    /* background-color: rgba(155, 153, 153, 0.671); */
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    padding: 0px 5px;
+
+}
+
+.form button img {
+    width: 28px;
+    /* height: 28px; */
+}

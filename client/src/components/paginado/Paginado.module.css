@@ -1,0 +1,56 @@
+.paginado .lista ul {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    /* Este es para separar = flex || grid*/
+}
+
+.paginado .lista li {
+    list-style: none;
+}
+
+.paginado .lista button {
+    width: 48px;
+    height: 40px;
+    padding-bottom: 1px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    transition: 500ms;
+    font-size: 20px;
+    cursor: pointer;
+    /* display: flex; */
+
+}
+
+.paginado .lista button:hover {
+
+    background-color: rgba(255, 255, 255, 0.733);
+    color: black;
+
+
+}
+
+.paginado .lista .display {
+    background-color: white;
+    color: black;
+    border: white;
+    display: none;
+}
+
+
+
+.paginado .lista .display {
+    background-color: var(--second-color);
+    color: var(--bc-body-color);
+    border: var(--second-color);
+    display: none;
+}
+
+
+
+.paginado .list .no {
+    transition: 500ms;
+    display: block;
+}

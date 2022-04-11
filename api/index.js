@@ -1,0 +1,45 @@
+//                       _oo0oo_
+//                      o8888888o
+//                      88" . "88
+//                      (| -_- |)
+//                      0\  =  /0
+//                    ___/`---'\___
+//                  .' \\|     |// '.
+//                 / \\|||  :  |||// \
+//                / _||||| -:- |||||- \
+//               |   | \\\  -  /// |   |
+//               | \_|  ''\---/''  |_/ |
+//               \  .-\__  '-'  ___/-. /
+//             ___'. .'  /--.--\  `. .'___
+//          ."" '<  `.___\_<|>_/___.' >' "".
+//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+//         \  \ `_.   \_ __\ /__ _/   .-` /  /
+//     =====`-.____`.___ \_____/___.-`___.-'=====
+//                       `=---='
+//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+require('dotenv').config();
+const server = require('./src/app.js');
+const { conn } = require('./src/db.js');
+const axios = require('axios')
+const { Genre } = require('./src/db')
+const e = require('express');
+const { API_KEY } = process.env
+
+// Syncing all the models at once.
+conn.sync({ force: false }).then(async () => {
+  try {
+    const genresApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`);
+    const arrGenres = genresApi.data.results
+    const genres = arrGenres.map((g) => g.name);
+    genres.forEach((el) => {
+      Genre.findOrCreate({ where: { name: el } });
+    });
+
+  } catch (error) {
+    console.log(error)
+  }
+
+  server.listen(3001, () => {
+    console.log('%s listening at 3001'); // eslint-disable-line no-console
+  });
+});

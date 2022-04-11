@@ -1,0 +1,14 @@
+.Search_bar {
+    display: flex;
+    /* flex-direction; */
+    justify-content: center;
+    /* justify-content: space-between; */
+}
+
+.Item_1 {
+    /* background-color: red; */
+}
+
+.Item_2 {
+    /* background-color: red; */
+}
