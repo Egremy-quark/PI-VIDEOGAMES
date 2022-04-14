@@ -7,17 +7,22 @@ const { Op } = require("sequelize");
 function dbConcat(gamesApiResults = [], gamesDb = [], search) {
 
     if (gamesApiResults.data?.count === 0 && gamesDb.length === 0) {
-        res.json('No se encontraron coincidencias')
-    } else {
+
+        games = []
+        return games
+
+    }
+
+    else {
+
         let gamesApi;
 
-
+        // console.log(gamesDb)
         gamesApi = gamesApiResults.data?.results?.map(game => extractDataApi(game)) || []
         gamesApi.slice(1, 12)
 
-        // console.log('Aquí concatenamos: ', gamesDb)
         const games = [...gamesDb, ...gamesApi]
-        // console.log(games)
+
 
         if (search) {
             return games.slice(0, 15)
@@ -43,6 +48,7 @@ function extractDataApi({ id, name, description, released, rating, background_im
 
 }
 
+
 const getVideogames = async () => {
     try {
         const games = [];
@@ -67,6 +73,8 @@ const getVideogames = async () => {
     }
 };
 
+
+
 const getDbVideogames = async () => {
     let dbgamesdata = await Videogame.findAll({
 
@@ -79,7 +87,23 @@ const getDbVideogames = async () => {
         },
     });
 
-    return dbgamesdata;
+    let newdatagame = dbgamesdata.map((e) => {
+        return {
+            id: e.id,
+            name: e.name,
+            rating: e.rating,
+            image: e.image,
+            platforms: e.platforms,
+            genres: e.genres.map((e) => e.name),
+            description: e.description,
+            released: e.released,
+            createdVideoGame: e.createdVideoGame,
+
+        };
+    });
+
+    return newdatagame;
+
 };
 
 const getAllInfo = () => {
@@ -109,8 +133,8 @@ async function getGenres() {
 async function searchForName(search) {
 
     let gamesApiResults = []
-    let gamesDb = []
-
+    let newdata = []
+    let dbFiltrada = []
     try {
         console.log('Búsqueda por nombre', search)
         gamesApiResults = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&search=${search}`)
@@ -120,23 +144,50 @@ async function searchForName(search) {
 
     try {
 
-        gamesDb = await Videogame.findAll({
-            where: {
-                name: {
-                    [Op.or]: [
-                        { [Op.substring]: `${search}` },
-                        { [Op.substring]: `${search.charAt(0).toUpperCase() + search.slice(1)}` }
-                    ]
-                }
-            }
+
+        let gamesDb = await Videogame.findAll({
+
+            include: {
+                model: Genre,
+                attributes: ["name"],
+                through: {
+                    attributes: [],
+                },
+            },
         });
-        // console.log(gamesDb)
+
+
+
+        newdata = gamesDb.map((e) => {
+            return {
+                id: e.id,
+                name: e.name,
+                rating: e.rating,
+                image: e.image,
+                platforms: e.platforms,
+                genres: e.genres.map((e) => e.name),
+                description: e.description,
+                released: e.released,
+                createdVideoGame: e.createdVideoGame,
+
+            };
+        });
+
+        dbFiltrada = newdata.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
+
+        console.log(dbFiltrada)
+
+
+
     } catch (err) {
         console.log('db', err)
     }
 
-    return dbConcat(gamesApiResults, gamesDb, true)
+    return dbConcat(gamesApiResults, dbFiltrada, true)
 }
+
+
+
 
 module.exports = {
     getVideogames,

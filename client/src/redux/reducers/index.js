@@ -2,19 +2,24 @@ const initialState = {
     videogames: [],
     copyVideogames: [],
     genres: [],
-    detail: []
+    detail: [],
+    names: []
 }
 
 function rootReducer(state = initialState, action) {
     // eslint-disable-next-line default-case
     switch (action.type) {
         case 'GET_VIDEOGAMES':
-
             return {
                 ...state,
                 videogames: action.payload,
                 copyVideogames: action.payload
             };
+        case 'GET_NAMES':
+            return {
+                ...state,
+                names: action.payload
+            }
         case 'DELETE_VIDEOGAME':
             return {
                 ...state
@@ -29,29 +34,17 @@ function rootReducer(state = initialState, action) {
                 genres: action.payload
             };
         case 'GET_DETAILS':
-            let newArr = []
             let arrGenre = action.payload;
             let arrDetail = []
 
             if (action.payload.hasOwnProperty('name')) {
-                // console.log('entré a la api')
                 arrDetail = action.payload
             }
 
             if (action.payload[0] && action.payload[0].hasOwnProperty('createdVideoGame')) {
-                // console.log('entré al db')
-
-                // eslint-disable-next-line array-callback-return
-                arrGenre[0].genres.map((d) => {
-                    newArr.push(d.name)
-                })
-
-                arrGenre[0].genres = newArr
-
                 arrDetail = arrGenre[0]
             }
 
-            // console.log(arrDetail)
             return {
                 ...state,
                 detail: arrDetail
@@ -72,13 +65,13 @@ function rootReducer(state = initialState, action) {
             const gamesPostFilter = action.payload === "all" ? videogames :
                 // eslint-disable-next-line array-callback-return
                 videogames.filter(r => {
-                    console.log(r)
+                    // console.log(r)
                     let genre = r.genres.map(d => {
-                        console.log(d)
+                        // console.log(d)
                         return d
                     })
                     if (genre.includes(action.payload))
-                        return r //Verificar si lo que pasamos por el option está dentro de cada recipe
+                        return r
                 })
             return {
                 ...state,
@@ -114,12 +107,23 @@ function rootReducer(state = initialState, action) {
                 ...state,
                 copyVideogames: gamesCopied
             }
-        // case 'FILTER_PLATFORM':
-        //     let platform = [];
+        case 'FILTER_PLATFORM':
+            const videogameByPlat = state.copyVideogames;
+            let gameByPlatform = action.payload === "all" ? videogameByPlat :
+                // eslint-disable-next-line array-callback-return
+                videogameByPlat.filter(r => {
 
-        //     if (action.payload === 'Xbox') {
-        //         platform = state.videogames.filter(r => r.platform.includes('Xbox'))
-        //     }
+                    let platform = r.platforms.map(d => {
+                        // console.log(d)
+                        return d
+                    })
+                    if (platform.includes(action.payload))
+                        return r //Verificar si lo que pasamos por el option está dentro de cada vgame
+                })
+            return {
+                ...state,
+                copyVideogames: gameByPlatform
+            }
 
         default:
             return { ...state };

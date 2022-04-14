@@ -17,9 +17,7 @@ const CreateGame = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const [validador, setvalidador] = useState("");
-    const [error, setError] = useState({
 
-    })
 
     let plataformas = [
         'PlayStation 3',
@@ -75,7 +73,7 @@ const CreateGame = () => {
         } else if (videogame.platforms.length === 0) {
             setvalidador("You have to choose a platform");
         } else if (videogame.genres.length === 0) {
-            setvalidador("You to classify your videogame");
+            setvalidador("You need to classify your videogame");
         } else {
             if (videogame.name) {
                 if (!id) {

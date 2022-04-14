@@ -7,14 +7,41 @@ const { getVideogames, getDbVideogames, getAllInfo, searchForName, getGenres } =
 
 const router = Router();
 
+router.get('/names', async (req, res) => {
+    try {
+        const info = await getAllInfo()
+        const names = info.map(e => e.name)
+
+        res.status(200).json(names)
+
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+
 router.get("/videogames", async (req, res) => {
     try {
-        const { name } = req.query;
+        let { name } = req.query;
         console.log(name)
+
         if (name) {
             console.log('Por name: ', name)
+            name = name.replace(/["']/g, "");
+
             const games = await searchForName(name)
-            res.json(games)
+            // let arr = []
+            // arr = games.filter((p) => p.name.toLowerCase().includes(name.toLowerCase()));
+
+
+            if (games.length === 0) {
+
+                res.status(200).json([])
+
+            } else {
+                res.json(games)
+            }
+
         } else {
             const allgames = await getAllInfo();
             res.status(200).send(allgames);
@@ -25,6 +52,41 @@ router.get("/videogames", async (req, res) => {
     }
 
 });
+
+
+// router.get("/videogames", async (req, res) => {
+//     try {
+//         let { name } = req.query;
+//         console.log(name)
+
+//         if (name) {
+//             console.log('Por name: ', name)
+//             name = name.replace(/["']/g, "");
+
+//             const games = await getAllInfo(name)
+
+//             let arr = []
+//             arr = games.filter((p) => p.name.toLowerCase().includes(name.toLowerCase()));
+
+
+//             if (arr.length === 0) {
+
+//                 res.status(200).json([])
+
+//             } else {
+//                 res.status(200).json(arr)
+//             }
+
+//         } else {
+//             const allgames = await getAllInfo();
+//             res.status(200).send(allgames);
+//         }
+
+//     } catch (error) {
+//         console.log(error)
+//     }
+
+// });
 
 router.get("/videogames/:id", async function (req, res) {
 
@@ -52,6 +114,7 @@ router.get("/videogames/:id", async function (req, res) {
                 genres: gameById.data.genres.map((g) => g.name),
                 platforms: gameById.data.parent_platforms.map((p) => p.platform.name),
             };
+            console.log(oneGame)
             return res.status(200).json(oneGame);
         }
     } catch (error) {

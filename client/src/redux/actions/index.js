@@ -15,6 +15,20 @@ export const getVideogames = () => {
     }
 }
 
+export const getNames = () => {
+    return async (dispatch) => {
+        try {
+            let names = await axios.get('http://localhost:3001/names')
+            return dispatch({
+                type: 'GET_NAMES',
+                payload: names.data
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
 export const getGenres = () => {
     return async (dispatch) => {
         try {
@@ -31,11 +45,11 @@ export const getGenres = () => {
 
 // ======================By-Name=============
 
-export const getGameByName = (name) => {
+export const getGameByName = (title) => {
     return async function (dispatch) {
         try {
-            const json = await axios.get(`http://localhost:3001/videogames?name=${name}`)
-
+            const json = await axios.get(`http://localhost:3001/videogames?name=${title}`)
+            // console.log('Hola soy un search', json.data)
             return dispatch({
                 type: 'GET_VIDEOGAMES_NAME',
                 payload: json.data
@@ -75,6 +89,13 @@ export const orderByName = (payload) => {
 export const filterGenre = (payload) => {
     return {
         type: 'FILTER_BY_GENRE',
+        payload
+    }
+}
+
+export const filterPlatform = (payload) => {
+    return {
+        type: 'FILTER_PLATFORM',
         payload
     }
 }

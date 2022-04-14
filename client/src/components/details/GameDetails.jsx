@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDetails, deleteGame } from '../../redux/actions/index';
 import Classes from "./GameDetails.module.css"
@@ -8,6 +8,7 @@ import wait from '../UI/wait.gif'
 // import released from '../UI/date.svg'
 
 const GameDetails = () => {
+    let navigate = useNavigate()
     const dispatch = useDispatch();
     const gameId = useParams();
     let GameDetail = useSelector((state) => state.detail)
@@ -15,6 +16,8 @@ const GameDetails = () => {
     const deleteG = () => {
         if (GameDetail.hasOwnProperty('createdVideoGame')) {
             dispatch(deleteGame(gameId.id))
+            alert("juego eliminado");
+            navigate('/home')
         } else {
             alert('Este videojuego no puede ser eliminado')
         }

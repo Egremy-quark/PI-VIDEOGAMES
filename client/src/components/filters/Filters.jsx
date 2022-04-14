@@ -1,10 +1,25 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { orderByName, filterGenre, filterByRating, filterPost } from '../../redux/actions/index'
+import { orderByName, filterGenre, filterByRating, filterPost, filterPlatform } from '../../redux/actions/index'
 import Classes from '../filters/filter.module.css'
 const Filters = ({ handleOrder, handlePage }) => {
     const dispatch = useDispatch()
     const selectGenre = useSelector(state => state.genres)
+
+    let plataformas = [
+        'PlayStation 3',
+        'PlayStation 4',
+        'PlayStation 5',
+        'PC',
+        'Xbox 360',
+        'Xbox One',
+        'Xbox Series S/X',
+        'macOS',
+        'iOS',
+        'Android',
+        'Linux',
+        'Nintendo Switch'
+    ]
 
     const handleOrderName = (e) => {
         e.preventDefault()
@@ -50,13 +65,32 @@ const Filters = ({ handleOrder, handlePage }) => {
         }
     }
 
-    // const handleOrderPlatform = (e) => {
-    //     e.preventDefault()
+    const handleOrderPlatform = (e) => {
+        e.preventDefault()
 
-    // }
+        if (e.target.value === 'not') {
+            e.target.value = "Platform filter"
+        } else {
+            dispatch(filterPlatform(e.target.value))
+            handlePage(1)
+        }
+    }
 
     return (
         <div className={Classes.filtros}>
+            <select
+                className={Classes.filter}
+                onChange={(e) => handleOrderPlatform(e)} >
+                <option value='not'>Platform filter</option>
+                {plataformas.map(e => {
+                    return (
+                        <option key={e} value={e}>
+                            {e}
+                        </option>
+                    )
+                })}
+            </select>
+
             <select
                 className={Classes.filter}
                 onChange={(e) => handleOrderName(e)} >
